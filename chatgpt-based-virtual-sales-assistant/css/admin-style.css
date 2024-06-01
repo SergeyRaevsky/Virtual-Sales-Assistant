@@ -1,0 +1,13 @@
+.wrap input[type="text"],
+.wrap select {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.button {
+    margin-top: 10px;
+}
