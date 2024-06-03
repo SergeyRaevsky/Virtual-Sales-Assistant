@@ -1,8 +1,8 @@
 jQuery(document).ready(function($) {
-    var businessInfo = chatgpt_sales_manager.business_info;
-    var managerName = chatgpt_sales_manager.manager_name;
-    var greeting = chatgpt_sales_manager.greeting;
-    var avatarUrl = chatgpt_sales_manager.avatar_url;
+    var businessInfo = virtual_sales_assistant.business_info;
+    var managerName = virtual_sales_assistant.manager_name;
+    var greeting = virtual_sales_assistant.greeting;
+    var avatarUrl = virtual_sales_assistant.avatar_url;
     var context = [{ role: 'system', content: businessInfo }];
     var userName = '';
     var userLanguage = '';
@@ -22,21 +22,21 @@ jQuery(document).ready(function($) {
     $('#send-button').click(function() {
         var userInput = $('#user-input').val();
         if (userInput.trim() !== '') {
-            addMessage('user', userInput, userName || chatgpt_sales_manager.you_label);
+            addMessage('user', userInput, userName || virtual_sales_assistant.you_label);
             $('#user-input').val('');
             context.push({ role: 'user', content: userInput });
 
             if (!userName) {
                 determineUserNameAndLanguage(userInput, function(name, language) {
-                    userName = name || chatgpt_sales_manager.default_user_name;
+                    userName = name || virtual_sales_assistant.default_user_name;
                     userLanguage = language || 'en';
                     context.push({ role: 'user', content: userInput });
                     $.ajax({
-                        url: chatgpt_sales_manager.ajax_url,
+                        url: virtual_sales_assistant.ajax_url,
                         type: 'post',
                         data: {
-                            action: 'chatgpt_sales_manager',
-                            security: chatgpt_sales_manager.nonce,
+                            action: 'virtual_sales_assistant',
+                            security: virtual_sales_assistant.nonce,
                             context: JSON.stringify(context)
                         },
                         success: function(response) {
@@ -44,21 +44,21 @@ jQuery(document).ready(function($) {
                                 addMessage('bot', response.data.response, managerName);
                                 context.push({ role: 'assistant', content: response.data.response });
                             } else {
-                                addMessage('bot', chatgpt_sales_manager.error_message + response.data.response, managerName);
+                                addMessage('bot', virtual_sales_assistant.error_message + response.data.response, managerName);
                             }
                         },
                         error: function() {
-                            addMessage('bot', chatgpt_sales_manager.generic_error_message, managerName);
+                            addMessage('bot', virtual_sales_assistant.generic_error_message, managerName);
                         }
                     });
                 });
             } else {
                 $.ajax({
-                    url: chatgpt_sales_manager.ajax_url,
+                    url: virtual_sales_assistant.ajax_url,
                     type: 'post',
                     data: {
-                        action: 'chatgpt_sales_manager',
-                        security: chatgpt_sales_manager.nonce,
+                        action: 'virtual_sales_assistant',
+                        security: virtual_sales_assistant.nonce,
                         context: JSON.stringify(context)
                     },
                     success: function(response) {
@@ -66,11 +66,11 @@ jQuery(document).ready(function($) {
                             addMessage('bot', response.data.response, managerName);
                             context.push({ role: 'assistant', content: response.data.response });
                         } else {
-                            addMessage('bot', chatgpt_sales_manager.error_message + response.data.response, managerName);
+                            addMessage('bot', virtual_sales_assistant.error_message + response.data.response, managerName);
                         }
                     },
                     error: function() {
-                        addMessage('bot', chatgpt_sales_manager.generic_error_message, managerName);
+                        addMessage('bot', virtual_sales_assistant.generic_error_message, managerName);
                     }
                 });
             }
@@ -79,11 +79,11 @@ jQuery(document).ready(function($) {
 
     function addMessage(sender, text, name) {
         var senderAvatarUrl = sender === 'bot' ? avatarUrl : '';
-        var senderName = name || (sender === 'bot' ? managerName : chatgpt_sales_manager.you_label);
+        var senderName = name || (sender === 'bot' ? managerName : virtual_sales_assistant.you_label);
         var messageClass = sender === 'bot' ? 'bot' : 'user';
 
         var messageHtml = '<div class="message-container ' + messageClass + '">' +
-            '<div class="avatar">' + (sender === 'bot' ? '<img src="' + senderAvatarUrl + '" alt="' + chatgpt_sales_manager.bot_avatar_alt + '">' : '<div class="user-avatar"></div>') + '</div>' +
+            '<div class="avatar">' + (sender === 'bot' ? '<img src="' + senderAvatarUrl + '" alt="' + virtual_sales_assistant.bot_avatar_alt + '">' : '<div class="user-avatar"></div>') + '</div>' +
             '<div class="content">' +
             '<div class="name">' + senderName + '</div>' +
             '<div class="text">' + text + '</div>' +
@@ -96,11 +96,11 @@ jQuery(document).ready(function($) {
 
     function determineUserNameAndLanguage(userInput, callback) {
         $.ajax({
-            url: chatgpt_sales_manager.ajax_url,
+            url: virtual_sales_assistant.ajax_url,
             type: 'post',
             data: {
-                action: 'chatgpt_sales_manager_determine_name_language',
-                security: chatgpt_sales_manager.nonce,
+                action: 'virtual_sales_assistant_determine_name_language',
+                security: virtual_sales_assistant.nonce,
                 user_input: userInput
             },
             success: function(response) {
